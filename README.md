@@ -1,3 +1,17 @@
+**Table of content:**
+[URL Shortener](#url-shortener)
+[Features](#features)
+[Requirements](#requirements)
+[Installation](#installation)
+[Usage](#usage)
+[Functional Requirements](#functional-requirements)
+[Architecture](#architecture)
+[Scalability](#scalability)
+[Shortening Algorithm](#shortening-algorithm)
+[Metrics](#metrics)
+[Database Schema](#database-schema)
+[API Documentation](#api-documentation)
+
 # URL Shortener!
 
 The URL Shortener service creates a short URL to be used as an alias for a long URL. This short URL will redirect the user to the long URL when accessed. This is similar to the service provided by Bitly or Tinyurl.
@@ -19,11 +33,13 @@ The URL Shortener service creates a short URL to be used as an alias for a long 
 
 ## Usage
 -  Once the docker containers are up and running, identify the IP of the web server through the following commands
-	> $ docker ps
- 	> CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS          PORTS                    NAMES
- 	> 7159d5711693   nginx:alpine                        "/docker-entrypoint.…"   9 seconds ago    Up 8 seconds    0.0.0.0:80->80/tcp       webserver
+```
+$ docker ps
+CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS          PORTS                    NAMES
+7159d5711693   nginx:alpine                        "/docker-entrypoint.…"   9 seconds ago    Up 8 seconds    0.0.0.0:80->80/tcp       webserver
+```
  - The URL Shortener service can be accessed on port 80, as follows
-	> curl http://172.0.0.1
+	> curl http://0.0.0.0
 	
 ## Functional Requirements
 - User should be able to create a unique shortened URL for any specific long URL.
