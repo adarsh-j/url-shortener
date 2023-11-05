@@ -1,16 +1,16 @@
 **Table of content:**
-[URL Shortener](#url-shortener)
-[Features](#features)
-[Requirements](#requirements)
-[Installation](#installation)
-[Usage](#usage)
-[Functional Requirements](#functional-requirements)
-[Architecture](#architecture)
-[Scalability](#scalability)
-[Shortening Algorithm](#shortening-algorithm)
-[Metrics](#metrics)
-[Database Schema](#database-schema)
-[API Documentation](#api-documentation)
+- [URL Shortener](#url-shortener)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Functional Requirements](#functional-requirements)
+- [Architecture](#architecture)
+- [Scalability](#scalability)
+- [Shortening Algorithm](#shortening-algorithm)
+- [Metrics](#metrics)
+- [Database Schema](#database-schema)
+- [API Documentation](#api-documentation)
 
 # URL Shortener!
 
