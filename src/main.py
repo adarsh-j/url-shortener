@@ -1,15 +1,15 @@
 #!/usr/local/bin/python3
 
+import logging
 from flask import Flask
 
+from routes import route_blueprint
 
 app = Flask('UrlShortener')
+app.register_blueprint(route_blueprint)
 
-@app.route('/')
-def index():
-    resp = dict()
-    resp['msg'] = 'Welcome to URL Shortener service'
-    return make_response(jsonify(resp))
 
 if __name__ == '__main__':
+    FORMAT = '%(asctime)s %(message)s'
+    logging.basicConfig(level=logging.INFO, format=FORMAT)
     app.run(host='0.0.0.0', port=8000)
