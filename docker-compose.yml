@@ -1,0 +1,26 @@
+version: '3'
+services:
+  urlshortener:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      - CONNECTION=postgres://postgres:password@postgres:5432/urls_db
+    volumes:
+      - type: bind
+        source: ./logs
+        target: /var/log/
+
+  postgres:
+    image: timescale/timescaledb:latest-pg14
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=urls_db
+    volumes:
+      - type: bind
+        source: ./data/postgres_data
+        target: /var/lib/postgresql/data
