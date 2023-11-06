@@ -13,3 +13,4 @@ if __name__ == '__main__':
     FORMAT = '%(asctime)s %(message)s'
     logging.basicConfig(level=logging.INFO, format=FORMAT)
     app.run(host='0.0.0.0', port=8000)
+

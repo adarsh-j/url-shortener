@@ -1,5 +1,21 @@
 version: '3'
 services:
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    depends_on:
+      - urlshortener
+    ports:
+      - "80:80"
+    networks:
+      - frontend
+    volumes:
+      - type: bind
+        source: ./config/nginx/conf.d/
+        target: /etc/nginx/conf.d/
+
   urlshortener:
     build:
       context: ./src
@@ -8,13 +24,26 @@ services:
       - postgres
     environment:
       - CONNECTION=postgres://postgres:password@postgres:5432/urls_db
+      - WAIT_HOSTS=postgres:5432
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - type: bind
         source: ./logs
         target: /var/log/
+    networks:
+      - frontend
+      - backend
 
   postgres:
     image: timescale/timescaledb:latest-pg14
+    hostname: localhost
     restart: unless-stopped
     environment:
       - POSTGRES_USER=postgres
@@ -24,3 +53,12 @@ services:
       - type: bind
         source: ./data/postgres_data
         target: /var/lib/postgresql/data
+    networks:
+      - backend
+
+#Docker Networks
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge

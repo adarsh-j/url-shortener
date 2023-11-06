@@ -3,6 +3,8 @@
 import logging
 import random
 import string
+import time
+from db_connector import DbConnector
 
 _log = logging.getLogger(__name__)
 
@@ -13,6 +15,8 @@ class UrlEngine:
         self.char_pool.extend([ c for c in string.ascii_uppercase ])
         self.char_pool.extend([ c for c in string.digits ])
         
+        self.db = DbConnector(self.short_url_len)
+
     def _generateShortUrl(self):
         shortUrl = ''
         for i in range(self.short_url_len):
@@ -21,14 +25,26 @@ class UrlEngine:
         return shortUrl
 
     def getLongUrl(self, shortUrl, incr=False):
-        return "longUrl"
+        longUrl = self.db.getLongUrl(shortUrl)
+
+        if longUrl and incr:
+            self.db.incrTotalAccessCount(shortUrl)
+            self.db.insertMetric(shortUrl, int(time.time()))
+        return longUrl
 
     def createShortUrl(self, longUrl):
         shortUrl = self._generateShortUrl()
+        self.db.insertUrl(shortUrl, longUrl)
         return shortUrl
 
     def deleteShortUrl(self, shortUrl):
-        return
+        # Also purge the metrics associated with this shortUrl
+        self.db.purgeMetrics(shortUrl)
+        self.db.purgeUrl(shortUrl)
 
     def getMetrics(self, shortUrl, start_time, end_time):
-        return 0
+        if start_time == 0:
+            count = self.db.getTotalAccessCount(shortUrl)
+        else:
+            count = self.db.getHourlyAccessCount(shortUrl, start_time, end_time)
+        return count

@@ -85,6 +85,14 @@ def deleteUrl():
 def getMetrics(shorturl, hour):
     resp = dict()
     resp['shorturl'] = shorturl
+    try:
+        hour = int(hour)
+    except Exception as e:
+        logging.error(f'Failed to extract hour, {e}')
+        return abort(make_response(jsonify(message="Specify the number of hours in integer"), 404))
+
+    if int(hour) > 24:
+        return abort(make_response(jsonify(message="Number of hours should be an integer between 0 and 25"), 404))
 
     end_time = int(time.time())
     if hour == 0:
