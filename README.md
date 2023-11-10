@@ -92,7 +92,10 @@ CONTAINER ID   IMAGE                               COMMAND                  CREA
 
 ##### Parameters
 
-> None
+> | name              |  type     | data type      | description                  |
+> |-------------------|-----------|----------------|------------------------------|
+> | `short_url`       |  required | string         | The unique short URL         |
+
 
 ##### Responses
 
@@ -165,6 +168,37 @@ CONTAINER ID   IMAGE                               COMMAND                  CREA
 > ```
 
 </details>
+
+------------------------------------------------------------------------------------------
+
+#### Metrics
+
+<details>
+ <summary><code>GET</code> <code><b>/api/v1/metrics/{shorturl}/{hour}</b></code> <code>(get metrics)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                                     |
+> |-------------------|-----------|----------------|-------------------------------------------------|
+> | `short_url`       |  required | string         | The unique short URL                            |
+> | `hour`            |  required | int            | Number of hours between 0 and 168, inclusive    |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                                                      |
+> |---------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
+> | `200`         |  `application/json`               | `{"shorturl":"<shorturl>","count":<int>, "start_time": <long int>, "end_time": <long int>}`   |
+> | `404`         |  `application/json`               | `{"shorturl":"<shorturl>","message":<string>"}`                                               |
+
+
+##### Example cURL
+
+> ```javascript
+>  curl GET http://localhost/api/v1/metrics/u6Ht3e/0	
+> ```
+
+</details>
+
 ------------------------------------------------------------------------------------------
 
 ## Tests
