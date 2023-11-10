@@ -52,6 +52,8 @@ CONTAINER ID   IMAGE                               COMMAND                  CREA
 
 ## Architecture
 
+
+
 ### Scalability
 
 ### Shortening Algorithm
