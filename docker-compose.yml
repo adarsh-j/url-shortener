@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 services:
   webserver:
     image: nginx:alpine
@@ -10,7 +10,7 @@ services:
     ports:
       - "80:80"
     networks:
-      - frontend
+        - frontend
     volumes:
       - type: bind
         source: ./config/nginx/conf.d/
@@ -38,8 +38,8 @@ services:
         source: ./logs
         target: /var/log/
     networks:
-      - frontend
-      - backend
+        - frontend
+        - backend
 
   postgres:
     image: timescale/timescaledb:latest-pg14
@@ -54,9 +54,26 @@ services:
         source: ./data/postgres_data
         target: /var/lib/postgresql/data
     networks:
-      - backend
+        - backend
 
-#Docker Networks
+  integrationtests:
+    build:
+      context: ./tests
+      dockerfile: Dockerfile
+    depends_on:
+      - webserver
+    environment:
+      - WAIT_HOSTS=webserver:80
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+    volumes:
+      - type: bind
+        source: ./logs
+        target: /var/log/
+    networks:
+        - frontend
+
 networks:
   frontend:
     driver: bridge

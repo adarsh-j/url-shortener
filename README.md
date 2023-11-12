@@ -20,8 +20,7 @@ The URL Shortener service creates a short URL to be used as an alias for a long 
 - Every short URL is case sensitive, unique and will point and resolve to only one long URL. A long URL can have multiple short URLs pointing to it.
 - The size of all short URL is always 6 characters long and consists of characters [a-zA-Z0-9].
 - The URL mapping will remain in the system forever and can be deleted through an API.
-- The maximum length of the long URL supported is 2048 characters. This is an arbitrary number chosen and there is no constraint to change this to a higher number if required.
-- High level metrics to track the usage of short URLs can be accessed through the metrics API.
+- Metrics to track the usage of short URLs can be accessed through the metrics API.
 
 ## Requirements
 - This service was developed and tested on a Linux host (Ubuntu 20.04) with Docker v20.10.5 running.
@@ -62,5 +61,89 @@ CONTAINER ID   IMAGE                               COMMAND                  CREA
 
 ## API Documentation
 
+Module routes
+=============
+
+Functions
+---------
+
+    
+`createUrl()`
+:   This endpoint is used to create a short URL from a real URL.
+    The short URL returned is unique and points to this original URL only.
+    Accepts the `url` in JSON format.
+    Example Input:
+    ```
+    {
+        "url" : "www.google.com"
+    }
+    ```
+    Example Output:
+    ```
+    {
+        "longurl" : "www.google.com",
+        "shorturl" : "X8uE9s"
+    }
+    ```
+
+    
+`deleteUrl()`
+:   This endpoint is used to delete an existing short URL and all its associated metrics.
+    A HTTP code 404 is returned if the short URL does not exist.
+    Example Input:
+    ```
+    {
+        "url" : "x8uE9s"
+    }
+    ```
+    Example Output:
+    ```
+    {
+        "message" : "success",
+        "shorturl" : "X8uE9s"
+    }
+    ```
+
+    
+`getMetrics(shorturl, hour)`
+:   This endpoint is used to get the number of times a specific short URL was accessed,
+    in the number of hours specified.
+    hour is an integer between 0 and 168 (which is the number of hours in a week).
+    If the hour is 0, all time access count is returned. Otherwise, access time is the past
+    <hour> hours is returned.
+    
+    A HTTP code 404 is returned if
+        - The short URL does not exist.
+        - Hour is not an integer between 0 and 168.
+    Success return is a JSON which contains
+        - short URL
+        - count, in int
+        - start_time, which is (current time) - (number of hours) in epoch seconds OR
+            0 if hour is 0
+        - end_time, which is (current time) in epoch seconds
+    
+    Example Input:
+    ```
+    /api/v1/metrics/x8uE9s/24
+    ```
+    Example Output:
+    ```
+    {
+        "shorturl" : "X8uE9s"
+        "count" : 128,
+        "start_time" : "1699422878",
+        "end_time" : "1699426478"
+    }
+    ```
+
+    
+`index()`
+:   This endpoint serves the home page
+
+    
+`readUrl(shortUrl)`
+:   This endpoint is used to redirect (HTTP code 302) the short URL to the actual long URL.
+    If the short URL does not exist, a HTTP code 404 is returned.
+    All short URLs are 6 character length and contain [a-zA-Z0-9] characters only.
 
 ## Tests

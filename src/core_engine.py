@@ -27,6 +27,8 @@ class UrlEngine:
     def getLongUrl(self, shortUrl, incr=False):
         longUrl = self.db.getLongUrl(shortUrl)
 
+        _log.info(longUrl)
+        _log.info(shortUrl)
         if longUrl and incr:
             self.db.incrTotalAccessCount(shortUrl)
             self.db.insertMetric(shortUrl, int(time.time()))

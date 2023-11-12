@@ -5,6 +5,8 @@ from flask import Flask
 
 from routes import route_blueprint
 
+_log = logging.getLogger(__name__)
+
 app = Flask('UrlShortener')
 app.register_blueprint(route_blueprint)
 
